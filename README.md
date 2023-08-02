@@ -34,3 +34,10 @@ Deploy a sample `Lock` contract using the gasless deploy HardHat plugin.
 ```bash
 yarn deploy:gsn
 ```
+
+You should expect something as follows:
+```bash
+....
+Transaction hash: 0x00000000a6d7ab10560d5ae6951daf77387b24ab2935ea06c05eaa3595dc78d1
+Target contract "Lock" has been deployed @ "0x563013bCb323D720c4a282AA060552cCE3860c85"
+```
