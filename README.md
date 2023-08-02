@@ -8,12 +8,35 @@ This is an working example for [gasless deployer hardhat plugin](https://www.npm
 yarn
 ```
 
-## Run local GSN relayer
+## Start local GSN
 In new terminal start your local GSN relayer (local network)
 ```bash
 yarn gsn-with-ganache
 ```
 
+You should see the following contracts address:
+
+```bash
+  RelayHub: 0xC89Ce4735882C9F0f0FE26686c53074E09B0D550
+  RelayRegistrar: 0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab
+  StakeManager: 0x5b1869D9A4C187F2EAa108f3062412ecf0526b24
+  Penalizer: 0xCfEB869F69431e42cdB54A4F4f105C19C080A601
+  Forwarder: 0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B
+  TestToken (test only): 0x9b1f7F645351AF3631a656421eD2e40f2802E6c0
+  Paymaster : 0xD833215cBcc3f914bD1C9ece3EE7BF8B14f841bb
+```
+
+## Configure
+Update the paymaster, relayer hub and forwarder in `hardhat-config.ts` with the addresses produced with your local GSN (above):
+
+```javascript
+hHGaslessDeployer: {
+    ...
+    paymaster: "0xD833215cBcc3f914bD1C9ece3EE7BF8B14f841bb",
+    relayerHub: "0xC89Ce4735882C9F0f0FE26686c53074E09B0D550",
+    forwarder: "0x254dffcd3277C0b1660F6d42EFbB754edaBAbC2B",
+  },
+```
 
 ## Usage
 
@@ -33,6 +56,18 @@ Deploy a sample `Lock` contract using the gasless deploy HardHat plugin.
 
 ```bash
 yarn deploy:gsn
+```
+
+If this is the first time, you run this plugin, it will deploy two helper contracts:
+- A factory contract: which holds generic deployment logic with `CREATE2`.
+- A paymaster contract: which uses WhitelistPaymaster. These contracts will be deployed only once and their data will be stored in `gasless-contracts-deployments.json` file.
+```json
+{
+  "gsn": {
+    "factory": "0x6eD79Aa1c71FD7BdBC515EfdA3Bd4e26394435cC",
+    "paymaster": "0xb09bCc172050fBd4562da8b229Cf3E45Dc3045A6"
+  }
+}
 ```
 
 You should expect something as follows:
