@@ -4,7 +4,8 @@
     "ganache": "yarn run ganache-cli -d --chainId 1337",
     "gsn-with-ganache": "run-with-testrpc -d --chainId 1337 'gsn start'",
     "deploy:gsn": "npx hardhat --network gsn gaslessDeploy",
-    "clean": "rm -rf ./artifacts ./build/ ./gasless-contracts-deployments.json"
+    "clean": "rm -rf ./artifacts ./build/ ./gasless-contracts-deployments.json",
+    "test": "npx hardhat --network gsn test"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",

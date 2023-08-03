@@ -1,6 +1,6 @@
 # Hardhat-gasless-deployer-example
 
-This is an working example for [gasless deployer hardhat plugin](https://www.npmjs.com/package/hardhat-gasless-deployer) using the [gas station network](https://opengsn.org/).
+This is a working example for [gasless deployer hardhat plugin](https://www.npmjs.com/package/hardhat-gasless-deployer) using the [gas station network](https://opengsn.org/).
 
 
 ## Install
@@ -9,12 +9,12 @@ yarn
 ```
 
 ## Start local GSN
-In new terminal start your local GSN relayer (local network)
+Start a new terminal to run your local GSN relayer (local network)
 ```bash
 yarn gsn-with-ganache
 ```
 
-You should see the following contracts address:
+You should see the following predeployed contracts address:
 
 ```bash
   RelayHub: 0xC89Ce4735882C9F0f0FE26686c53074E09B0D550
@@ -27,7 +27,7 @@ You should see the following contracts address:
 ```
 
 ## Configure
-Update the paymaster, relayer hub and forwarder in `hardhat-config.ts` with the addresses produced with your local GSN (above):
+Update the paymaster, relayer hub and forwarder contract addresses in `hardhat-config.ts` with the addresses produced from your local GSN (above):
 
 ```javascript
 hHGaslessDeployer: {
@@ -52,15 +52,18 @@ Add your private key in `hardhat-config.ts`, this key will be used for signing t
     ...
 ```
 
-Deploy a sample `Lock` contract using the gasless deploy HardHat plugin.
+Finally, deploy the sample `Lock` contract using the gasless deploy HardHat plugin.
 
 ```bash
 yarn deploy:gsn
 ```
 
-If this is the first time, you run this plugin, it will deploy two helper contracts:
+If this is the first time you run this plugin, it will deploy two helper contracts:
+
 - A factory contract: which holds generic deployment logic with `CREATE2`.
-- A paymaster contract: which uses WhitelistPaymaster. These contracts will be deployed only once and their data will be stored in `gasless-contracts-deployments.json` file.
+- A paymaster contract: A whitelist paymaster but for simiplicity, the plugin will use a pre-deployed paymaster. 
+
+These contracts will be deployed `only once` and their data will be stored in `gasless-contracts-deployments.json` file.
 ```json
 {
   "gsn": {
@@ -76,3 +79,15 @@ You should expect something as follows:
 Transaction hash: 0x00000000a6d7ab10560d5ae6951daf77387b24ab2935ea06c05eaa3595dc78d1
 Target contract "Lock" has been deployed @ "0x563013bCb323D720c4a282AA060552cCE3860c85"
 ```
+
+## Test
+
+You can run `yarn test` to execute a simple test case for deploying `Lock` contract on the GSN local net.
+
+The test case has to: 
+- deploy the factory & whitlestPaymaster contracts
+- check the balance before deploying target contract `Lock` 
+- deploy the target `Lock` contract
+- assert that the balance doesn't change after the deployment
+
+Please do note that sometimes the deployment might fail because at some point the randomly generated salt for `CREATE2` doesn't fulfill the `keccak256` hashing requirements. This will be fixed later. However you can re-run the test and it should work again.
